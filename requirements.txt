@@ -1,2 +1,4 @@
-mcp[cli]==1.2.0
+mcp[cli]>=1.10.0
 httpx
+uvicorn
+starlette

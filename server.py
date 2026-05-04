@@ -6,8 +6,10 @@ import xml.etree.ElementTree as ET
 import httpx
 from mcp.server.fastmcp import FastMCP
 
+host = os.environ.get("HOST", "0.0.0.0")
 port = int(os.environ.get("PORT", 8000))
-mcp = FastMCP("dart-mcp", host="0.0.0.0", port=port)
+mcp = FastMCP("dart-mcp", host=host, port=port)
+mcp.settings.transport_security.enable_dns_rebinding_protection = False
 
 DART_API_KEY = os.environ.get("DART_API_KEY", "")
 BASE_URL = "https://opendart.fss.or.kr/api"
@@ -233,5 +235,5 @@ async def get_executive_info(corp_code: str) -> str:
 
 if __name__ == "__main__":
     import sys
-    transport = sys.argv[1] if len(sys.argv) > 1 else "stdio"
+    transport = sys.argv[1] if len(sys.argv) > 1 else "streamable-http"
     mcp.run(transport=transport)

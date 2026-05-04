@@ -9,4 +9,4 @@ COPY server.py .
 
 EXPOSE 8000
 
-CMD ["python", "server.py", "sse"]
+CMD ["python", "server.py", "streamable-http"]
