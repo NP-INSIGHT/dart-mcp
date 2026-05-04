@@ -242,5 +242,25 @@ async def get_executive_info(corp_code: str) -> str:
 
 if __name__ == "__main__":
     import sys
+    import uvicorn
+    from starlette.middleware import Middleware
+    from starlette.middleware.cors import CORSMiddleware
+
     transport = sys.argv[1] if len(sys.argv) > 1 else "streamable-http"
-    mcp.run(transport=transport)
+
+    if transport == "streamable-http":
+        app = mcp.streamable_http_app()
+        app.user_middleware.insert(
+            0,
+            Middleware(
+                CORSMiddleware,
+                allow_origins=["*"],
+                allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+                allow_headers=["*"],
+                expose_headers=["mcp-session-id", "mcp-protocol-version"],
+            ),
+        )
+        app.middleware_stack = app.build_middleware_stack()
+        uvicorn.run(app, host=host, port=port)
+    else:
+        mcp.run(transport=transport)
