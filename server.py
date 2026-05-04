@@ -5,11 +5,18 @@ import zipfile
 import xml.etree.ElementTree as ET
 import httpx
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 host = os.environ.get("HOST", "0.0.0.0")
 port = int(os.environ.get("PORT", 8000))
-mcp = FastMCP("dart-mcp", host=host, port=port)
-mcp.settings.transport_security.enable_dns_rebinding_protection = False
+mcp = FastMCP(
+    "dart-mcp",
+    host=host,
+    port=port,
+    transport_security=TransportSecuritySettings(
+        enable_dns_rebinding_protection=False,
+    ),
+)
 
 DART_API_KEY = os.environ.get("DART_API_KEY", "")
 BASE_URL = "https://opendart.fss.or.kr/api"
